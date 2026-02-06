@@ -1,10 +1,19 @@
 # Architecture multi-agent Tim
 
-## Rôles
-- **Orchestrateur (humain)** : supervise, valide, reprend les livrables. Contrôle les scripts.
-- **Sous-agents** : PO/BA/Dev. Chaque agent est un prompt/template Copilot (CLI ou loops).
+## Rôles & responsabilité
+| Rôle | Mission | Livrables obligatoires | Critères “Done” | Artéfacts de transition |
+| --- | --- | --- | --- | --- |
+| **PO (Proxy métier)** | Cadrer le besoin, prioriser, arbitrer | Vision produit, backlog priorisé, user stories INVEST, critères d’acceptance | Story claire, valeur explicite, priorisation justifiée, acceptance criteria testables | Issue GitHub (story) + template backlog + contexte prompt stocké dans `stories/` |
+| **BA (Documentation & QA)** | Transformer la vision en specs/testables | Spec fonctionnelle détaillée, spec technique, matrice de tests, plan de recette, hypothèses | Pas d’ambiguïté, mapping exigences→tests, cas d’erreur listés, scenarios de recette | Docs Markdown dans `docs/stories/<story>.md`, plan de tests + checklist dans `playbooks/ba.md` |
+| **Dev (Implémentation)** | Générer code/tests, respecter specs | Code versionné, tests unitaires/intégration, PR documentée, notes techniques | Conformité specs BA, tests passants, pas de dérive fonctionnelle, PR prête pour review | Branch/PR GitHub, artefact tests (résultats ou rapports), commentaires liés dans issue |
 
-## Orchestration
-1. Scripts `scripts/orchestrator.js` déclenchent chaque phase en séquence.
-2. GitHub Actions dans `automation/` : vérifient existence specs/test, lancent tests Copilot.
-3. Monitoring : BA/PO surveillent feedback + metrics.
+## Gouvernance & transitions
+- Aucune implémentation sans specs BA validées.
+- Aucun changement sans validation PO.
+- Toute ambiguïté arrête le pipeline (automation doit signaler). 
+- Une story passe de PO → BA → Dev lorsque le livrable “Done” est signé (checklist dans `playbooks/`), et un état JSON (`stories/<id>.json`) indique la phase courante.
+
+## Orchestration technique
+1. L’orchestrateur (`scripts/orchestrator.js`) lit un état `stories/<id>.json` (contexte, KPI, phase, valida- teurs) et déclenche séquentiellement les prompts fournis dans `prompts/`.
+2. Les GitHub Actions de `automation/` vérifient que les artefacts obligatoires sont présents, exécutent des scripts de test (`scripts/`), puis mettent à jour l’état de la story (ex : `status: dev→validation`).
+3. Le suivi post-release (monitoring/feedback) est documenté dans `docs/feedback.md` avec les métriques clés (lead time, rework, qualité specs, taux d’auto).
