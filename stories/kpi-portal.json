@@ -1,0 +1,37 @@
+{
+  "id": "kpi-portal",
+  "title": "Portail KPI temps réel",
+  "context": "Dashboard analytique interne pour suivre engagement client et santé financière.",
+  "objective": "Permettre à la direction finance de piloter les KPIs lead time et taux d’adoption.",
+  "kpis": [
+    "lead time story -40%",
+    "rework ratio <10%",
+    "qualité specs >90%",
+    "taux d’automatisation >60%"
+  ],
+  "constraints": [
+    "RGPD / données financières sensibles",
+    "Stack React + Supabase + Python worker",
+    "Performance temps réel",
+    "Accès restrain aux données sensibles (KYC)"
+  ],
+  "dependencies": [
+    "API Supabase des métriques",
+    "Microservice DualForce pour les transactions",
+    "React Component Library partagée"
+  ],
+  "acceptanceCriteria": [
+    "Vue dashboard avec filtres temps/régions",
+    "Export CSV sécurisé",
+    "Permissions admin + logs",
+    "Réconciliation données sous 5 minutes"
+  ],
+  "technicalNotes": "Utiliser Supabase Edge Functions pour les exports, worker Python, authentification via OAuth2.",
+  "tests": [
+    "Filtre temps réel fonctionne (unit + e2e)",
+    "Export CSV respecte permissions",
+    "Test de charge 100 req/s",
+    "Recette fonctionnelle avec QA"
+  ],
+  "phase": "po"
+}

@@ -14,6 +14,11 @@
 - Une story passe de PO → BA → Dev lorsque le livrable “Done” est signé (checklist dans `playbooks/`), et un état JSON (`stories/<id>.json`) indique la phase courante.
 
 ## Orchestration technique
-1. L’orchestrateur (`scripts/orchestrator.js`) lit un état `stories/<id>.json` (contexte, KPI, phase, valida- teurs) et déclenche séquentiellement les prompts fournis dans `prompts/`.
+1. L’orchestrateur (`scripts/orchestrator.js`) lit un état `stories/<id>.json` (contexte, KPI, phase, validateurs) et déclenche séquentiellement les prompts fournis dans `prompts/`. Il remonte automatiquement la phase (`po` → `ba` → `dev` → `validation`).
 2. Les GitHub Actions de `automation/` vérifient que les artefacts obligatoires sont présents, exécutent des scripts de test (`scripts/`), puis mettent à jour l’état de la story (ex : `status: dev→validation`).
 3. Le suivi post-release (monitoring/feedback) est documenté dans `docs/feedback.md` avec les métriques clés (lead time, rework, qualité specs, taux d’auto).
+
+### Exécution locale / CLI
+- Commande : `npm run orchestrate -- --story=kpi-portal --roles=po,ba,dev`
+- Le script charge `stories/kpi-portal.json`, génère les prompts pour chaque rôle en injectant ctx/KPI/tests, les affiche et note la progression dans le JSON.
+- On peut ensuite extraire `stories/kpi-portal.json` modifié pour mesurer la transition de phase et alimenter les playbooks.

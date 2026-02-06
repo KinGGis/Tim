@@ -17,3 +17,9 @@ Ce repo contient la base pour un système multi-agent (PO/BA/Dev) orchestré via
 2. Remplir `prompts/` pour chaque rôle en lien avec les stories initiales.
 3. Implémenter un script `scripts/orchestrator.js` qui enchaîne PO → BA → Dev.
 4. Ajouter une pipeline GitHub Actions dans `automation/` pour valider, tester, et monitorer.
+
+## Lancer l'orchestrateur local
+1. Installer les dépendances : `npm install` (Node >= 18).
+2. Exécuter `npm run orchestrate -- --story=kpi-portal --roles=po,ba,dev`.
+3. Chaque rôle génère son prompt contextualisé et la story est mise à jour dans `stories/kpi-portal.json`.
+4. Tu peux relancer la commande avec `--roles=ba,dev` ou un autre story après avoir copié le modèle.
