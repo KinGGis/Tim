@@ -1,0 +1,11 @@
+{
+  "name": "tim-agent-orchestrator",
+  "version": "0.1.0",
+  "description": "Orchestrateur multi-agent PO/BA/Dev intégré à Copilot",
+  "scripts": {
+    "orchestrate": "node scripts/orchestrator.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
